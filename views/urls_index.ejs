@@ -1,20 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<title>TinyApp</title>
-</head>
+<% include partials/_head %>
 <body>
-<% include partials/_header %>
-  <ul>
-  <% Object.keys(urls).forEach(function (url) { %>
-    <form method="POST" action="/urls/<%= url %>/delete">
-    <li>
-    <%= url %>: <%= urls[url] %> <button type="delete" value ="delete">Delete</button>
-    </li>
-    </form>
-  <% }) %>
-  <li> <a href = "#"> Shorten me! </a> </li>
-  </form>
-  </ul>
+  <% include partials/_header %>
+  <table>
+    <tr>
+      <th>
+        Short Link
+      </th>
+      <th>
+        Original Link
+      </th>
+      <th>
+        Action
+      </th>
+    </tr>
+    <% Object.keys(urls).forEach(function (url) { %>
+    <tr>
+      <td>
+        <a href="/u/<%= url %>">http://tiny.app/u/<%= url %></a>:
+      </td>
+      <td>
+        <a href="<%= urls[url] %>"><%= urls[url] %></a>
+      </td>
+      <td>
+        <form method="POST" action="/urls/<%= url %>/delete">
+          <button type="delete" value ="delete">Delete</button>
+        </form>
+      </td>
+    </tr>
+    <% }) %>
+  </table>
+  <p>
+    <a href = "#"> Shorten me! </a>
+  </p>
 </body>
 </html>

@@ -1,20 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<title>TinyApp</title>
-</head>
+<% include partials/_head %>
 <body>
 <% include partials/_header %>
-  <ul>
-    <form action="/urls" method="POST">
-    <li>
-    <%= shortURL %>: <%= longURL %>
-    <form>
-    <input type="text" name="updatelink">
-    <button type="update" value="update">Update</button>
-    </form>
-    </li>
-    </form>
-  </ul>
+  <table>
+    <tr>
+      <th>
+        Short Link
+      </th>
+      <th>
+        Original Link
+      </th>
+      <th>
+        Action
+      </th>
+    </tr>
+    <tr>
+      <td>
+        <a href="/u/<%= shortURL %>">http://tiny.app/u/<%= shortURL %></a>:
+      </td>
+      <td>
+        <%= longURL %>
+      </td>
+      <td>
+        <form action="/urls/<%= shortURL %>" method="POST">
+          <input type="text" name="updatelink">
+          <button type="update" value="update">Update</button>
+        </form>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>

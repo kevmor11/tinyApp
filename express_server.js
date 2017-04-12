@@ -14,31 +14,49 @@ const urlDatabase = {
 function generateRandomString() {
   return Math.random().toString(36).substr(2, 6);
 }
+
+app.get('/', (req, res) => {
+  res.redirect('/urls');
+})
+
 //pass urls_index the URL data
 app.get("/urls", (req,res) => {
   let templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
 })
+
 app.get("/urls/new", (req,res) => {
   res.render("urls_new");
 })
+
 app.get("/urls/:id", (req,res) => {
-  res.render("urls_show", {
+  let templateVars = {
     shortURL: req.params.id,
     longURL: urlDatabase[req.params.id],
-    poop: "caca"
-  });
+  };
+  res.render("urls_show", templateVars)
 })
+
 app.get("/urls", (req,res) => {
   let templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
 })
+
+// Update link
+app.post("/urls/:id", (req,res) => {
+  let newURL = req.body.updatelink;
+  let shortURL = req.params.id;
+  urlDatabase[shortURL] = newURL;
+  res.redirect(`/urls/${shortURL}`);
+})
+
 app.get("/u/:shortURL", (req, res) => {
   let longURL = urlDatabase[req.params.shortURL];
   if (longURL === undefined) {
-    throw "Link was undefined";
+    res.status(404).send("Sorry that link does not exist.<br><a href='/urls'>Return to Tiny App</a>");
+  } else {
+    res.redirect(longURL);
   }
-  res.redirect(longURL);
 });
 
 app.post("/urls", (req,res) => {
@@ -56,9 +74,6 @@ app.post("/urls/:id/delete", (req,res) => {
 //   res.status(404).send("Sorry, this page does not exist.")
 // })
 
-// console.log(req.body);  // debug statement to see POST parameters
 app.listen(PORT, ()=> {
   console.log(`Tinyapp listening on port ${PORT}!`);
 });
-//console.log(generateRandomString());
-console.log(urlDatabase);
