@@ -3,16 +3,14 @@
   <h2>TinyApp</h2>
 </header>
 <body>
-  <% if(username) { %>
-    <p>Welcome <%= username %>.</p>
+  <% if(user) { %>
+    <p>Welcome <%= user %>.</p>
     <form action="/logout" method="POST">
-      <button type="update" value="username">Logout</button>
+      <button type="update" value="user">Logout</button>
     </form>
   <% } else { %>
-  <form action="/login" method="POST">
-    <input type="text" name="username" placeholder="Username">
-    <button type="update" value="username">Login</button>
-  </form>
+    <a href="/register">Register</a><br>
+    <a href="/login">Login</a>
   <% } %>
 </body>
 </html>
