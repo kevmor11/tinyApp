@@ -1,1 +1,18 @@
-<h1> Welcome to Tiny App!</h1>
+<% include _head %>
+<header>
+  <h2>TinyApp</h2>
+</header>
+<body>
+  <% if(username) { %>
+    <p>Welcome <%= username %>.</p>
+    <form action="/logout" method="POST">
+      <button type="update" value="username">Logout</button>
+    </form>
+  <% } else { %>
+  <form action="/login" method="POST">
+    <input type="text" name="username" placeholder="Username">
+    <button type="update" value="username">Login</button>
+  </form>
+  <% } %>
+</body>
+</html>
