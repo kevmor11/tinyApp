@@ -58,12 +58,16 @@ app.get("/urls", (req,res) => {
 })
 
 app.get("/urls/new", (req,res) => {
-  let templateVars = {
-    shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id],
-    user: req.cookies["user_id"],
-  };
-  res.render("urls_new", templateVars);
+  if (req.loggedIn) {
+    let templateVars = {
+      shortURL: req.params.id,
+      longURL: urlDatabase[req.params.id],
+      user: req.cookies["user_id"],
+    };
+    res.render("urls_new", templateVars);
+  } else {
+    res.redirect("../login");
+  }
 })
 
 app.get("/urls/:id", (req,res) => {
@@ -116,7 +120,7 @@ app.post("/login", (req,res) => {
   if (authenticatedUser) {
     res.cookie("user_id",authenticatedUser.id).redirect("/");
   } else {
-    res.status(403).send("Sorry either that email is not registered or the password is incorrect.<br><a href='/register'>Register</a><br><a href='/login'>Login</a>")
+    res.status(403).send("Sorry either that email is not registered or the password is incorrect.<br><a href='/register'>Sign Up</a><br><a href='/login'>Login</a>")
   }
 })
 
