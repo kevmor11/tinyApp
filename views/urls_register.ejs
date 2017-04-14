@@ -1,14 +1,12 @@
 <% include partials/_head %>
-<header>
-  <h2>TinyApp</h2>
-</header>
 <body>
+  <header>
+    <h2>TinyApp</h2>
+  </header>
   <a href="/login">Login</a><br>
   <form action="/register" method="POST">
     <input type="email" name="email" placeholder="Email">
     <input type="password" name="password" placeholder="password">
-    <button type="update" value="email">Sign Up</button>
+    <button type="update">Sign Up</button>
   </form>
-</body>
-<% include partials/footer %>
-</html>
+  <% include partials/footer %>

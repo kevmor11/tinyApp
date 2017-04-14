@@ -14,8 +14,8 @@
       </th>
     </tr>
     <% Object.keys(urls).forEach(function (url) { %>
-    <tr>
-      <td>
+      <tr>
+        <td>
         <a href="/u/<%= url %>">http://tiny.app/u/<%= url %></a>:
       </td>
       <td>
@@ -24,7 +24,7 @@
       <td>
         <a href="/urls/<%= url %>">Edit</a>
         <form method="POST" action="/urls/<%= url %>/delete">
-        <button type="delete" value ="delete">Delete</button>
+          <button type="delete" value ="delete">Delete</button>
         </form>
       </td>
     </tr>
@@ -33,6 +33,4 @@
   <p>
     <a href = "#"> Shorten me! </a>
   </p>
-</body>
-<% include partials/footer %>
-</html>
+  <% include partials/footer %>
