@@ -1,8 +1,9 @@
 const express = require("express");
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 const app = express();
 const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
+const bcrypt = require("bcrypt")
 const PORT = 8080;
 
 // Bootstrap require
@@ -34,12 +35,13 @@ const users = {
   "userRandomID": {
     id: "userRandomID",
     email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+    password: "$2a$10$jh4WoZ5.3SXsElEkHxFvAukLpH4BvWiRhkbivrFq5X/cKU8ngXj9q"
+
   },
   "user2RandomID": {
     id: "user2RandomID",
     email: "user2@example.com",
-    password: "dishwasher-funk"
+    password: "$2a$10$f3RLWWcBer4cjGcI8dE6/OxOW3BJSCRfjvDg5Mfu1QLEeR2FZPLy."
   }
 }
 
@@ -102,7 +104,7 @@ app.get("/login", (req, res) => {
 app.post("/login", (req, res) => {
   function authenticated(email, password) {
     for (user in users) {
-      if (users[user].email === email && users[user].password === password) {
+      if (users[user].email === email && bcrypt.compareSync(password, users[user].hashed_password)) {
         return users[user];
       }
     }
@@ -152,7 +154,9 @@ function doesUserExist(email) {
 }
 
 app.post("/register", (req, res) => {
-  const { email, password } = req.body;
+  const email = req.body.email;
+  const password = req.body.password;
+  const hashed_password = bcrypt.hashSync(password, 10);
   const id = generateRandomString();
   if (req.body.email === '' || req.body.password === '') {
     res.status(400).send("Please enter an email and password.<br><a href='/register'>Return to Registry</a>")
@@ -162,7 +166,7 @@ app.post("/register", (req, res) => {
     users[id] = {
       id,
       email,
-      password,
+      hashed_password,
       urls: {}
     };
     req.session["user_id"] = id;
