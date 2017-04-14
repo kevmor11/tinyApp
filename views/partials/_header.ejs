@@ -3,6 +3,7 @@
 </header>
 <% if(userID) { %>
   <p>Welcome <%= userID %>.</p>
+  <a href="/urls">My Links</a>
   <form action="/logout" method="POST">
     <button type="update" value="user">Logout</button>
   </form>
