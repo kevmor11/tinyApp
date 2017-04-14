@@ -13,7 +13,7 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
   name: 'session',
-  keys: ['tinyApp'],
+  keys: ['user_id'],
 
   // Cookie Options
   maxAge: 24 * 60 * 60 * 1000 // 24 hours
@@ -127,7 +127,7 @@ app.post("/urls/:id", (req, res) => {
 })
 
 app.get("/u/:shortURL", (req, res) => {
-  let longURL = urlDatabase[req.params.shortURL];
+  let longURL = urlDatabase[req.params.shortURL].longURL;
   if (longURL === undefined) {
     res.status(404).send("Sorry that link does not exist.<br><a href='/urls'>Return to Tiny App</a>");
   } else {
