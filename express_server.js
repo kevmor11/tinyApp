@@ -2,6 +2,7 @@ const express = require("express");
 const cookieParser = require('cookie-parser');
 const app = express();
 const bodyParser = require("body-parser");
+const cookieSession = require("cookie-session");
 const PORT = 8080;
 
 // Bootstrap require
@@ -10,6 +11,14 @@ const PORT = 8080;
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieSession({
+  name: 'session',
+  keys: ['tinyApp'],
+
+  // Cookie Options
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}));
+
 app.set("view engine", "ejs");
 
 const urlDatabase = {
@@ -23,7 +32,7 @@ const users = {
     email: "user@example.com",
     password: "purple-monkey-dinosaur"
   },
- "user2RandomID": {
+  "user2RandomID": {
     id: "user2RandomID",
     email: "user2@example.com",
     password: "dishwasher-funk"
@@ -44,7 +53,7 @@ app.get("/urls", (req,res) => {
   let templateVars = {
     urls: urlDatabase,
     user: req.cookies["user_id"],
-     };
+  };
   res.render("urls_index", templateVars);
 })
 
@@ -94,17 +103,18 @@ app.get("/login", (req,res) => {
 })
 
 app.post("/login", (req,res) => {
-
-  function doesPasswordMatch(user,password) {
-  for (user in users) {
-    if ((users[user].password) === req.body.password) {
-      return true;
+  function authenticated(email,password) {
+    for (user in users) {
+      if (users[user].email === email && users[user].password === password) {
+        return users[user];
       }
     }
   }
 
-  if (doesUserExist(req.body.email) && doesPasswordMatch(req.body.email,req.body.password)) {
-    res.cookie("user_id",req.body.user_id).redirect("/");
+  const authenticatedUser = authenticated(req.body.email,req.body.password)
+
+  if (authenticatedUser) {
+    res.cookie("user_id",authenticatedUser.id).redirect("/");
   } else {
     res.status(403).send("Sorry either that email is not registered or the password is incorrect.<br><a href='/register'>Register</a><br><a href='/login'>Login</a>")
   }
@@ -152,13 +162,13 @@ app.post("/register", (req,res) => {
   } else if (doesUserExist(email)) {
     res.status(400).send("A user by that email is already registered.<br><a href='/register'>Return to Registry</a>")
   } else {
-  users[newUserId] = {
-    id,
-    email,
-    password
-  };
-  res.cookie("user_id", id)
-  res.redirect("/");
+    users[newUserId] = {
+      id,
+      email,
+      password
+    };
+    res.cookie("user_id", id)
+    res.redirect("/");
   }
 })
 
