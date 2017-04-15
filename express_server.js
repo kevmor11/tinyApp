@@ -59,40 +59,29 @@ function generateRandomString() {
   return Math.random().toString(36).substr(2, 6);
 }
 
-app.get('/', (req, res) => {
-  res.redirect('/urls');
+app.get("/register", (req, res) => {
+  res.render("urls_register");
 })
 
-//pass urls_index the URL data
-app.get("/urls", (req, res) => {
-  let myLinks = {};
-  for (shortURL in urlDatabase) {
-    if (req.session["user_id"] === urlDatabase[shortURL].userID) {
-      myLinks[shortURL] = urlDatabase[shortURL].longURL;
-    }
+app.post("/register", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const hashed_password = bcrypt.hashSync(password, 10);
+  const id = generateRandomString();
+  if (req.body.email === '' || req.body.password === '') {
+    res.status(400).send("Please enter an email and password.<br><a href='/register'>Return to Registry</a>")
+  } else if (doesUserExist(email)) {
+    res.status(400).send("A user by that email is already registered.<br><a href='/register'>Return to Registry</a>")
+  } else {
+    users[id] = {
+      id,
+      email,
+      hashed_password,
+      urls: {}
+    };
+    req.session["user_id"] = id;
+    res.redirect("/");
   }
-  let templateVars = {
-    urls: myLinks,
-  }
-  res.render("urls_index", templateVars);
-})
-
-app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
-})
-
-app.get("/urls/:id", (req, res) => {
-  // const userID = req.session["user_id"];
-  let templateVars = {
-    shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id].longURL
-  }
-  res.render("urls_show", templateVars)
-})
-
-app.post("/logout", (req, res) => {
-  req.session["user_id"] = null;
-  res.redirect("/urls");
 })
 
 app.get("/login", (req, res) => {
@@ -118,12 +107,62 @@ app.post("/login", (req, res) => {
   }
 })
 
+app.post("/logout", (req, res) => {
+  req.session["user_id"] = null;
+  res.redirect("/urls");
+})
+
+app.get('/', (req, res) => {
+  res.redirect('/urls');
+})
+
+//pass urls_index the URL data
+app.get("/urls", (req, res) => {
+  let myLinks = {};
+  for (shortURL in urlDatabase) {
+    if (req.session["user_id"] === urlDatabase[shortURL].userID) {
+      myLinks[shortURL] = urlDatabase[shortURL].longURL;
+    }
+  }
+  let templateVars = {
+    urls: myLinks,
+  }
+  res.render("urls_index", templateVars);
+})
+
+app.post("/urls", (req, res) => {
+  let randomString = generateRandomString();
+  urlDatabase[randomString] = {
+    longURL: req.body.longURL,
+    userID: req.session["user_id"]
+  };
+  res.redirect("/urls/" + randomString);
+})
+
+app.get("/urls/new", (req, res) => {
+  res.render("urls_new");
+})
+
+app.get("/urls/:id", (req, res) => {
+  // const userID = req.session["user_id"];
+  let templateVars = {
+    shortURL: req.params.id,
+    longURL: urlDatabase[req.params.id].longURL
+  }
+  res.render("urls_show", templateVars)
+})
+
 // Update link
 app.post("/urls/:id", (req, res) => {
   let newURL = req.body.updatelink;
   let shortURL = req.params.id;
   urlDatabase[shortURL].longURL = newURL;
   res.redirect(`/urls/${shortURL}`);
+})
+
+app.post("/urls/:id/delete", (req, res) => {
+  delete urlDatabase[req.params.id];
+  res.redirect("/urls");
 })
 
 app.get("/u/:shortURL", (req, res) => {
@@ -133,10 +172,6 @@ app.get("/u/:shortURL", (req, res) => {
   } else {
     res.redirect(longURL);
   }
-})
-
-app.get("/register", (req, res) => {
-  res.render("urls_register");
 })
 
 function countUsers() {
@@ -150,41 +185,6 @@ function doesUserExist(email) {
     }
   }
 }
-
-app.post("/register", (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
-  const hashed_password = bcrypt.hashSync(password, 10);
-  const id = generateRandomString();
-  if (req.body.email === '' || req.body.password === '') {
-    res.status(400).send("Please enter an email and password.<br><a href='/register'>Return to Registry</a>")
-  } else if (doesUserExist(email)) {
-    res.status(400).send("A user by that email is already registered.<br><a href='/register'>Return to Registry</a>")
-  } else {
-    users[id] = {
-      id,
-      email,
-      hashed_password,
-      urls: {}
-    };
-    req.session["user_id"] = id;
-    res.redirect("/");
-  }
-})
-
-app.post("/urls", (req, res) => {
-  let randomString = generateRandomString();
-  urlDatabase[randomString] = {
-    longURL: req.body.longURL,
-    userID: req.session["user_id"]
-  };
-  res.redirect("/urls/" + randomString);
-})
-
-app.post("/urls/:id/delete", (req, res) => {
-  delete urlDatabase[req.params.id];
-  res.redirect("/urls");
-})
 
 app.use(function (req, res, next) {
   res.status(404).send("Sorry, this page does not exist.")
