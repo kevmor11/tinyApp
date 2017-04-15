@@ -13,6 +13,9 @@
         </ul>
 <% if(userID) { %>
   <p>Welcome <%= userID %>.</p>
+    <p>
+      <a href = "/urls/new"> New Link </a>
+    </p>
   <form action="/logout" method="POST">
     <button type="update" value="user" class="btn btn-info" style="position: absolute; right: 0; vertical-align: middle;">Logout</button>
   </form>

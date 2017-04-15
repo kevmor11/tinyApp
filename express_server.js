@@ -1,6 +1,11 @@
+// Requiring and invoking the express framework, which facilitates the the HTTP
+// request/response methods, sets the port/view egine, and uses the essential middle
 const express = require("express");
 const app = express();
+// Requiring our body-parser which allows us to recieve incoming JSON requests
+// and parses them for use through req.body
 const bodyParser = require("body-parser");
+// Requiring cookie-session which allows for encrypted cookies
 const cookieSession = require("cookie-session");
 const bcrypt = require("bcrypt")
 const PORT = 8080;
