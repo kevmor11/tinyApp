@@ -1,6 +1,38 @@
 <!-- views/partials/footer.ejs -->
 <footer>
+<div id="container">
+   <div id="header"></div>
+   <div id="body"></div>
+   <div id="footer"></div>
+</div>
   <p class="text-center text-muted">© Copyright 2017 Kevin The Greatest Programmer of All Time</p>
 </footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+<style>
+html,
+body {
+   margin:0;
+   padding:0;
+   height:100%;
+   background-color: #e6f9ff;
+}
+#container {
+   min-height:100%;
+   position:relative;
+}
+#body {
+   padding:10px;
+   padding-bottom:150px;   /* Height of the footer */
+}
+#footer {
+   position:bottom;
+   bottom:0;
+   width:100%;
+   height:60px;   /* Height of the footer */
+}
+#container {
+   height:100%;
+}
+</style>
 </body>
 </html>

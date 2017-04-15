@@ -1,13 +1,28 @@
-<header>
-  <h2>TinyApp</h2>
-</header>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">
+                <span class="glyphicon glyphicon glyphicon-link"></span>
+                <!-- EJS Is Fun -->
+            </a>
+        </div>
+
+        <ul class="nav navbar-nav">
+            <li><a href="/">My Links</a></li>
+        </ul>
 <% if(userID) { %>
   <p>Welcome <%= userID %>.</p>
-  <a href="/urls">My Links</a>
   <form action="/logout" method="POST">
-    <button type="update" value="user">Logout</button>
+    <button type="update" value="user" class="btn btn-info" style="position: absolute; right: 0; vertical-align: middle;">Logout</button>
   </form>
   <% } else { %>
     <a href="/register">Register</a><br>
     <a href="/login">Login</a>
     <% } %>
+    </div>
+</nav>
+
+<header>
+  <h2>TinyURL</h2>
+</header>
