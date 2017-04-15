@@ -23,7 +23,9 @@
         <a href="<%= urls[url] %>"><%= urls[url] %></a>
       </td>
       <td>
-        <a href="/urls/<%= url %>">Edit</a>
+        <form method="GET" action="/urls/<%= url %>">
+          <button type="edit" class="btn btn-info" value ="edit">Edit</button>
+        </form>
         <form method="POST" action="/urls/<%= url %>/delete">
           <button type="delete" class="btn btn-info" value ="delete">Delete</button>
         </form>

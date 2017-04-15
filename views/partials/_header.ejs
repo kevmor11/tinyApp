@@ -1,29 +1,28 @@
 <nav class="navbar navbar-default" role="navigation">
-    <div class="container-fluid">
+  <div class="container-fluid">
 
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">
-                <span class="glyphicon glyphicon glyphicon-link"></span>
-                <!-- EJS Is Fun -->
-            </a>
-        </div>
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">
+        <span class="glyphicon glyphicon glyphicon-link"></span>
+        <!-- EJS Is Fun -->
+      </a>
+    </div>
 
-        <ul class="nav navbar-nav">
-            <li><a href="/">My Links</a></li>
-        </ul>
-<% if(userID) { %>
-  <p>Welcome <%= userID %>.</p>
-    <p>
-      <a href = "/urls/new"> New Link </a>
+    <ul class="nav navbar-nav">
+    <li><a href="/">My Links</a></li>
+    </ul>
+    <% if(userID) { %>
+    <p>Welcome <%= email.email %>        <form action="/logout" method="POST">
+      <button type="update" value="user" class="btn btn-info" style="position: absolute; right: 0; vertical-align: middle; margin-right: 5px;">Logout</button>
+    </form> </p>
+    <p><p style="margin-top: 11px;">
+      <a href = "/urls/new"> Create a New Link </a>
     </p>
-  <form action="/logout" method="POST">
-    <button type="update" value="user" class="btn btn-info" style="position: absolute; right: 0; vertical-align: middle;">Logout</button>
-  </form>
-  <% } else { %>
+    <% } else { %>
     <a href="/register">Register</a><br>
     <a href="/login">Login</a>
     <% } %>
-    </div>
+  </div>
 </nav>
 
 <header>
