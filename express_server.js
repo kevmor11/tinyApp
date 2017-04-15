@@ -1,5 +1,4 @@
 const express = require("express");
-const cookieParser = require("cookie-parser");
 const app = express();
 const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
@@ -10,7 +9,6 @@ const PORT = 8080;
 // const boot = require("bootstrap");
 // app.use(express.static('public'));
 
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
   name: 'session',
@@ -35,13 +33,13 @@ const users = {
   "userRandomID": {
     id: "userRandomID",
     email: "user@example.com",
-    password: "$2a$10$jh4WoZ5.3SXsElEkHxFvAukLpH4BvWiRhkbivrFq5X/cKU8ngXj9q"
+    hashed_password: "$2a$10$jh4WoZ5.3SXsElEkHxFvAukLpH4BvWiRhkbivrFq5X/cKU8ngXj9q"
 
   },
   "user2RandomID": {
     id: "user2RandomID",
     email: "user2@example.com",
-    password: "$2a$10$f3RLWWcBer4cjGcI8dE6/OxOW3BJSCRfjvDg5Mfu1QLEeR2FZPLy."
+    hashed_password: "$2a$10$f3RLWWcBer4cjGcI8dE6/OxOW3BJSCRfjvDg5Mfu1QLEeR2FZPLy."
   }
 }
 
@@ -104,7 +102,7 @@ app.get("/login", (req, res) => {
 app.post("/login", (req, res) => {
   function authenticated(email, password) {
     for (user in users) {
-      if (users[user].email === email && bcrypt.compareSync(password, users[user].hashed_password)) {
+      if (users[user].email === email && bcrypt.compareSync(password, users[user].hashed_password, 10)) {
         return users[user];
       }
     }
